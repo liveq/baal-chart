@@ -357,9 +357,34 @@
         </header>
 
         <main>
-            <!-- 차트 생성 버튼 (상단) -->
-            <div style="text-align: center; margin-bottom: 25px;">
-                <button class="btn-generate" id="generateBtnTop" data-ko="📊 차트 생성" data-en="📊 Generate Chart">📊 차트 생성</button>
+            <!-- 📊 차트 타입 선택 (상단) -->
+            <div class="chart-type-section" style="margin-bottom: 25px;">
+                <div class="chart-types">
+                    <button class="chart-type-btn active" data-type="line">
+                        <svg class="chart-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
+                        <span data-ko="선" data-en="Line">선</span>
+                    </button>
+                    <button class="chart-type-btn" data-type="bar">
+                        <svg class="chart-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="20" x2="12" y2="10"></line><line x1="18" y1="20" x2="18" y2="4"></line><line x1="6" y1="20" x2="6" y2="16"></line></svg>
+                        <span data-ko="막대" data-en="Bar">막대</span>
+                    </button>
+                    <button class="chart-type-btn" data-type="pie">
+                        <svg class="chart-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.21 15.89A10 10 0 1 1 8 2.83"></path><path d="M22 12A10 10 0 0 0 12 2v10z"></path></svg>
+                        <span data-ko="원형" data-en="Pie">원형</span>
+                    </button>
+                    <button class="chart-type-btn" data-type="doughnut">
+                        <svg class="chart-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="6"></circle><path d="M12 2 L12 8"></path><path d="M19.07 4.93 L14.83 9.17"></path></svg>
+                        <span data-ko="도넛" data-en="Doughnut">도넛</span>
+                    </button>
+                    <button class="chart-type-btn" data-type="radar">
+                        <svg class="chart-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2, 22 12, 17 22, 7 22, 2 12"></polygon><polygon points="12 7, 18 12, 15 18, 9 18, 6 12"></polygon><line x1="12" y1="2" x2="12" y2="7"></line><line x1="22" y1="12" x2="18" y2="12"></line></svg>
+                        <span data-ko="방사형" data-en="Radar">방사형</span>
+                    </button>
+                    <button class="chart-type-btn" data-type="polarArea">
+                        <svg class="chart-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="2" x2="12" y2="22"></line><line x1="2" y1="12" x2="22" y2="12"></line><line x1="5.64" y1="5.64" x2="18.36" y2="18.36"></line><line x1="5.64" y1="18.36" x2="18.36" y2="5.64"></line></svg>
+                        <span data-ko="극좌표" data-en="Polar">극좌표</span>
+                    </button>
+                </div>
             </div>
 
             <!-- 📝 데이터 입력 -->
@@ -820,15 +845,8 @@
             }
         });
 
-        // 차트 생성 버튼 이벤트 (상단 + 테이블 영역)
-        const generateBtnTop = document.getElementById('generateBtnTop');
+        // 차트 생성 버튼 이벤트 (테이블 영역만)
         const generateBtnTable = document.getElementById('generateBtnTable');
-
-        if (generateBtnTop) {
-            generateBtnTop.addEventListener('click', () => {
-                generateChart();
-            });
-        }
 
         if (generateBtnTable) {
             generateBtnTable.addEventListener('click', () => {
