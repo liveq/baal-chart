@@ -40,25 +40,38 @@
     <!-- 공통 스타일 -->
     <link rel="stylesheet" href="_common/common.css">
     <style>
+        /* 차트 타입 선택 영역 */
+        .chart-type-section {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+        }
+
         /* 차트 타입 선택 */
         .chart-types {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 12px;
-            margin-bottom: 30px;
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            flex: 1;
         }
 
         .chart-type-btn {
-            padding: 20px 16px;
+            padding: 8px 12px;
             border: 2px solid var(--border-color);
             background: var(--bg-secondary);
             color: var(--text-primary);
             border-radius: var(--border-radius-md);
             cursor: pointer;
             transition: all 0.2s;
-            font-size: 0.9em;
+            font-size: 0.85em;
             font-weight: 600;
             text-align: center;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            white-space: nowrap;
         }
 
         .chart-type-btn:hover {
@@ -70,15 +83,12 @@
             background: var(--gold-gradient);
             color: white;
             border-color: var(--gold-primary);
-            transform: translateY(-2px);
             box-shadow: var(--shadow-sm);
         }
 
         .chart-icon {
-            width: 48px;
-            height: 48px;
-            display: block;
-            margin: 0 auto 8px;
+            width: 18px;
+            height: 18px;
             stroke: currentColor;
         }
 
@@ -347,27 +357,24 @@
         </header>
 
         <main>
-            <!-- 📊 차트 타입 선택 -->
-            <div class="data-section">
-                <label class="data-label">
-                    <span data-ko="📊 차트 타입 선택" data-en="📊 Select Chart Type">📊 차트 타입 선택</span>
-                </label>
+            <!-- 📊 차트 타입 선택 & 생성 버튼 -->
+            <div class="chart-type-section">
                 <div class="chart-types">
                     <button class="chart-type-btn active" data-type="line">
                         <svg class="chart-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
-                        <span data-ko="선 그래프" data-en="Line Chart">선 그래프</span>
+                        <span data-ko="선" data-en="Line">선</span>
                     </button>
                     <button class="chart-type-btn" data-type="bar">
                         <svg class="chart-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="20" x2="12" y2="10"></line><line x1="18" y1="20" x2="18" y2="4"></line><line x1="6" y1="20" x2="6" y2="16"></line></svg>
-                        <span data-ko="막대 그래프" data-en="Bar Chart">막대 그래프</span>
+                        <span data-ko="막대" data-en="Bar">막대</span>
                     </button>
                     <button class="chart-type-btn" data-type="pie">
                         <svg class="chart-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.21 15.89A10 10 0 1 1 8 2.83"></path><path d="M22 12A10 10 0 0 0 12 2v10z"></path></svg>
-                        <span data-ko="원형 그래프" data-en="Pie Chart">원형 그래프</span>
+                        <span data-ko="원형" data-en="Pie">원형</span>
                     </button>
                     <button class="chart-type-btn" data-type="doughnut">
                         <svg class="chart-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="6"></circle><path d="M12 2 L12 8"></path><path d="M19.07 4.93 L14.83 9.17"></path></svg>
-                        <span data-ko="도넛 그래프" data-en="Doughnut">도넛 그래프</span>
+                        <span data-ko="도넛" data-en="Doughnut">도넛</span>
                     </button>
                     <button class="chart-type-btn" data-type="radar">
                         <svg class="chart-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2, 22 12, 17 22, 7 22, 2 12"></polygon><polygon points="12 7, 18 12, 15 18, 9 18, 6 12"></polygon><line x1="12" y1="2" x2="12" y2="7"></line><line x1="22" y1="12" x2="18" y2="12"></line></svg>
@@ -375,9 +382,10 @@
                     </button>
                     <button class="chart-type-btn" data-type="polarArea">
                         <svg class="chart-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="2" x2="12" y2="22"></line><line x1="2" y1="12" x2="22" y2="12"></line><line x1="5.64" y1="5.64" x2="18.36" y2="18.36"></line><line x1="5.64" y1="18.36" x2="18.36" y2="5.64"></line></svg>
-                        <span data-ko="극좌표" data-en="Polar Area">극좌표</span>
+                        <span data-ko="극좌표" data-en="Polar">극좌표</span>
                     </button>
                 </div>
+                <button class="btn-generate" id="generateBtnTop" data-ko="📊 차트 생성" data-en="📊 Generate">📊 차트 생성</button>
             </div>
 
             <!-- 📝 데이터 입력 -->
@@ -394,6 +402,7 @@
                         <button class="add-row-btn" id="csvUploadBtn" data-ko="📄 CSV 업로드" data-en="📄 Upload CSV">📄 CSV 업로드</button>
                         <button class="add-row-btn" id="addRowBtn" data-ko="➕ 행 추가" data-en="➕ Add Row">➕ 행 추가</button>
                         <button class="add-row-btn" id="deleteRowBtn" data-ko="🗑️ 선택행 삭제" data-en="🗑️ Delete Selected" style="background: rgba(255, 68, 68, 0.1); border-color: #ff4444; color: #ff4444;">🗑️ 선택행 삭제</button>
+                        <button class="add-row-btn" id="generateBtnTable" data-ko="📊 차트 생성" data-en="📊 Generate" style="background: var(--gold-gradient); border-color: var(--gold-primary); color: white; font-weight: 700;">📊 차트 생성</button>
                     </div>
                 </div>
                 <table class="data-table" id="dataTable">
@@ -514,11 +523,6 @@
                         </select>
                     </div>
                 </div>
-            </div>
-
-            <!-- 생성 버튼 -->
-            <div style="margin: 30px 0; text-align: center;">
-                <button class="btn-generate" id="generateBtn" data-ko="차트 생성" data-en="Generate Chart">차트 생성</button>
             </div>
 
             <!-- 4️⃣ 차트 미리보기 -->
@@ -816,10 +820,21 @@
             }
         });
 
-        // 차트 생성
-        document.getElementById('generateBtn').addEventListener('click', () => {
-            generateChart();
-        });
+        // 차트 생성 버튼 이벤트 (3개 버튼 모두 연결)
+        const generateBtnTop = document.getElementById('generateBtnTop');
+        const generateBtnTable = document.getElementById('generateBtnTable');
+
+        if (generateBtnTop) {
+            generateBtnTop.addEventListener('click', () => {
+                generateChart();
+            });
+        }
+
+        if (generateBtnTable) {
+            generateBtnTable.addEventListener('click', () => {
+                generateChart();
+            });
+        }
 
         function generateChart() {
             const rows = Array.from(document.querySelectorAll('#dataRows tr'));
