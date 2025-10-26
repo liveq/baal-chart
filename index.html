@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="무료 차트 생성기. Line, Bar, Pie, Doughnut 차트를 빠르게 만드세요. CSV 데이터 지원. PNG 다운로드.">
+    <meta name="keywords" content="차트 생성기, 그래프 만들기, 데이터 시각화, 무료 차트, CSV 차트, 막대 그래프, 원형 그래프">
+    <meta name="author" content="BAAL">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://chart.baal.co.kr/">
+    <meta property="og:title" content="차트 생성기 - 무료 온라인 도구">
+    <meta property="og:description" content="Line, Bar, Pie 차트를 무료로 생성하세요. CSV 지원, PNG 다운로드.">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://chart.baal.co.kr/">
+    <meta property="twitter:title" content="차트 생성기 - 무료 온라인 도구">
+    <meta property="twitter:description" content="데이터 시각화 차트를 빠르게 만드세요.">
+
+    <title>차트 생성기 - BAAL</title>
+
+    <!-- Google AdSense -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2886185075996969"
+     crossorigin="anonymous"></script>
+
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-XXXXXXXXXX');
+    </script>
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+
+    <!-- 공통 스타일 -->
+    <link rel="stylesheet" href="_common/common.css">
+    <style>
+        /* 차트 타입 선택 */
+        .chart-types {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 12px;
+            margin-bottom: 30px;
+        }
+
+        .chart-type-btn {
+            padding: 20px 16px;
+            border: 2px solid var(--border-color);
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            border-radius: var(--border-radius-md);
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0.9em;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        .chart-type-btn:hover {
+            border-color: var(--gold-primary);
+            background: var(--bg-accent);
+        }
+
+        .chart-type-btn.active {
+            background: var(--gold-gradient);
+            color: white;
+            border-color: var(--gold-primary);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .chart-icon {
+            font-size: 2em;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        /* 데이터 입력 */
+        .data-section {
+            background: var(--bg-accent);
+            border: 2px solid var(--border-color);
+            border-radius: var(--border-radius-lg);
+            padding: 25px;
+            margin-bottom: 25px;
+        }
+
+        .data-label {
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 15px;
+        }
+
+        .data-table th,
+        .data-table td {
+            padding: 10px;
+            border: 1px solid var(--border-color);
+            text-align: left;
+        }
+
+        .data-table th {
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        .data-table input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+        }
+
+        .add-row-btn {
+            padding: 10px 20px;
+            background: var(--bg-secondary);
+            border: 2px solid var(--border-color);
+            border-radius: var(--border-radius-sm);
+            color: var(--text-primary);
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        .add-row-btn:hover {
+            border-color: var(--gold-primary);
+            background: var(--bg-accent);
+        }
+
+        /* 차트 캔버스 */
+        .chart-container {
+            background: var(--bg-accent);
+            border: 2px solid var(--border-color);
+            border-radius: var(--border-radius-lg);
+            padding: 30px;
+            margin-bottom: 25px;
+            position: relative;
+        }
+
+        #chartCanvas {
+            max-width: 100%;
+            height: auto;
+        }
+
+        /* 커스터마이징 옵션 */
+        .options-section {
+            background: var(--bg-accent);
+            border: 2px solid var(--border-color);
+            border-radius: var(--border-radius-lg);
+            padding: 25px;
+            margin-bottom: 25px;
+        }
+
+        .option-row {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .option-row:last-child {
+            margin-bottom: 0;
+        }
+
+        .option-label {
+            font-weight: 600;
+            color: var(--text-primary);
+            min-width: 100px;
+            font-size: 0.95em;
+        }
+
+        .option-control {
+            flex: 1;
+        }
+
+        .option-select {
+            padding: 10px 14px;
+            border: 2px solid var(--border-color);
+            border-radius: var(--border-radius-sm);
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            font-size: 1em;
+            cursor: pointer;
+        }
+
+        /* 버튼 */
+        .btn-generate {
+            padding: 16px 48px;
+            background: var(--gold-gradient);
+            color: white;
+            border: 2px solid var(--gold-primary);
+            border-radius: var(--border-radius-md);
+            font-weight: 700;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: block;
+            margin: 0 auto;
+        }
+
+        .btn-generate:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .btn-download {
+            padding: 14px 32px;
+            background: var(--gold-gradient);
+            color: white;
+            border: 2px solid var(--gold-primary);
+            border-radius: var(--border-radius-md);
+            font-weight: 600;
+            font-size: 1em;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-download:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .download-buttons {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        /* 반응형 */
+        @media (max-width: 768px) {
+            .chart-types {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .option-row {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .option-label {
+                min-width: auto;
+            }
+
+            .option-control {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 다크모드 토글 -->
+    <div class="theme-toggle">
+        <button id="themeToggle" aria-label="다크모드 전환">
+            <span class="icon-light">☀️</span>
+            <span class="icon-dark">🌙</span>
+        </button>
+    </div>
+
+    <!-- 언어 전환 & 도구 버튼 -->
+    <div class="lang-toggle">
+        <button id="langToggle" data-lang="ko">
+            <span class="lang-ko">EN</span>
+            <span class="lang-en">KO</span>
+        </button>
+        <button id="toolsToggle">
+            <span class="tooltip" data-ko="더 많은 도구" data-en="More Tools">더 많은 도구</span>
+            🧰
+        </button>
+    </div>
+
+    <!-- 메인 컨테이너 -->
+    <div class="container">
+        <header>
+            <h1 data-ko="차트 생성기" data-en="Chart Generator">차트 생성기</h1>
+            <p class="subtitle" data-ko="데이터를 아름다운 차트로 시각화하세요" data-en="Visualize your data with beautiful charts">데이터를 아름다운 차트로 시각화하세요</p>
+        </header>
+
+        <main>
+            <!-- 1️⃣ 차트 타입 선택 -->
+            <div class="data-section">
+                <label class="data-label">
+                    <span data-ko="1️⃣ 차트 타입 선택" data-en="1️⃣ Select Chart Type">1️⃣ 차트 타입 선택</span>
+                </label>
+                <div class="chart-types">
+                    <button class="chart-type-btn active" data-type="line">
+                        <span class="chart-icon">📈</span>
+                        <span data-ko="선 그래프" data-en="Line Chart">선 그래프</span>
+                    </button>
+                    <button class="chart-type-btn" data-type="bar">
+                        <span class="chart-icon">📊</span>
+                        <span data-ko="막대 그래프" data-en="Bar Chart">막대 그래프</span>
+                    </button>
+                    <button class="chart-type-btn" data-type="pie">
+                        <span class="chart-icon">🥧</span>
+                        <span data-ko="원형 그래프" data-en="Pie Chart">원형 그래프</span>
+                    </button>
+                    <button class="chart-type-btn" data-type="doughnut">
+                        <span class="chart-icon">🍩</span>
+                        <span data-ko="도넛 그래프" data-en="Doughnut">도넛 그래프</span>
+                    </button>
+                    <button class="chart-type-btn" data-type="radar">
+                        <span class="chart-icon">🎯</span>
+                        <span data-ko="방사형" data-en="Radar">방사형</span>
+                    </button>
+                    <button class="chart-type-btn" data-type="polarArea">
+                        <span class="chart-icon">⭕</span>
+                        <span data-ko="극좌표" data-en="Polar Area">극좌표</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- 2️⃣ 데이터 입력 -->
+            <div class="data-section">
+                <label class="data-label">
+                    <span data-ko="2️⃣ 데이터 입력" data-en="2️⃣ Enter Data">2️⃣ 데이터 입력</span>
+                </label>
+                <div style="margin-bottom: 15px;">
+                    <input type="file" id="csvInput" accept=".csv" style="display: none;">
+                    <button class="add-row-btn" id="csvUploadBtn" data-ko="📄 CSV 업로드" data-en="📄 Upload CSV" style="margin-right: 10px;">📄 CSV 업로드</button>
+                    <small style="color: var(--text-secondary);" data-ko="CSV 형식: 첫 행 레이블, 이후 행 데이터" data-en="CSV format: First row labels, then data rows">CSV 형식: 첫 행 레이블, 이후 행 데이터</small>
+                </div>
+                <table class="data-table" id="dataTable">
+                    <thead>
+                        <tr>
+                            <th data-ko="레이블" data-en="Label">레이블</th>
+                            <th data-ko="값" data-en="Value">값</th>
+                        </tr>
+                    </thead>
+                    <tbody id="dataRows">
+                        <tr>
+                            <td><input type="text" value="항목 1" data-row="0" data-col="label"></td>
+                            <td><input type="number" value="12" data-row="0" data-col="value"></td>
+                        </tr>
+                        <tr>
+                            <td><input type="text" value="항목 2" data-row="1" data-col="label"></td>
+                            <td><input type="number" value="19" data-row="1" data-col="value"></td>
+                        </tr>
+                        <tr>
+                            <td><input type="text" value="항목 3" data-row="2" data-col="label"></td>
+                            <td><input type="number" value="3" data-row="2" data-col="value"></td>
+                        </tr>
+                        <tr>
+                            <td><input type="text" value="항목 4" data-row="3" data-col="label"></td>
+                            <td><input type="number" value="5" data-row="3" data-col="value"></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <button class="add-row-btn" id="addRowBtn" data-ko="+ 행 추가" data-en="+ Add Row">+ 행 추가</button>
+            </div>
+
+            <!-- 3️⃣ 커스터마이징 옵션 -->
+            <div class="options-section">
+                <label class="data-label">
+                    <span data-ko="3️⃣ 커스터마이징 (선택사항)" data-en="3️⃣ Customization (Optional)">3️⃣ 커스터마이징 (선택사항)</span>
+                </label>
+
+                <div class="option-row">
+                    <span class="option-label" data-ko="색상 팔레트" data-en="Color Palette">색상 팔레트</span>
+                    <div class="option-control">
+                        <select class="option-select" id="colorPalette">
+                            <option value="default" data-ko="기본" data-en="Default">기본</option>
+                            <option value="pastel" data-ko="파스텔" data-en="Pastel">파스텔</option>
+                            <option value="vivid" data-ko="비비드" data-en="Vivid">비비드</option>
+                            <option value="gold" data-ko="골드" data-en="Gold">골드</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="option-row">
+                    <span class="option-label" data-ko="범례 위치" data-en="Legend Position">범례 위치</span>
+                    <div class="option-control">
+                        <select class="option-select" id="legendPosition">
+                            <option value="top" data-ko="상단" data-en="Top">상단</option>
+                            <option value="bottom" data-ko="하단" data-en="Bottom">하단</option>
+                            <option value="left" data-ko="왼쪽" data-en="Left">왼쪽</option>
+                            <option value="right" data-ko="오른쪽" data-en="Right">오른쪽</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 생성 버튼 -->
+            <div style="margin: 30px 0; text-align: center;">
+                <button class="btn-generate" id="generateBtn" data-ko="차트 생성" data-en="Generate Chart">차트 생성</button>
+            </div>
+
+            <!-- 4️⃣ 차트 미리보기 -->
+            <div class="chart-container">
+                <canvas id="chartCanvas"></canvas>
+            </div>
+
+            <!-- 다운로드 버튼 -->
+            <div class="download-buttons">
+                <button class="btn-download" id="downloadPNG" data-ko="PNG 다운로드" data-en="Download PNG">PNG 다운로드</button>
+            </div>
+        </main>
+
+        <footer>
+            <div class="footer-content">
+                <p class="footer-brand">
+                    Made by <a href="https://baal.co.kr" target="_blank">BAAL</a>
+                </p>
+                <p class="footer-contact">
+                    <a href="mailto:baal.contract@gmail.com">baal.contract@gmail.com</a>
+                </p>
+                <p class="footer-links">
+                    <a href="https://baal.co.kr/privacy" target="_blank" data-ko="개인정보처리방침" data-en="Privacy Policy">개인정보처리방침</a>
+                    <span class="separator">|</span>
+                    <a href="https://baal.co.kr/terms" target="_blank" data-ko="이용약관" data-en="Terms of Service">이용약관</a>
+                </p>
+                <p class="footer-copyright">&copy; 2025 BAAL. All rights reserved.</p>
+            </div>
+        </footer>
+    </div>
+
+    <!-- 공통 스크립트 -->
+    <script src="_common/common.js"></script>
+    <script>
+        let currentChartType = 'line';
+        let chartInstance = null;
+
+        // 색상 팔레트
+        const colorPalettes = {
+            default: [
+                'rgba(255, 99, 132, 0.7)',
+                'rgba(54, 162, 235, 0.7)',
+                'rgba(255, 206, 86, 0.7)',
+                'rgba(75, 192, 192, 0.7)',
+                'rgba(153, 102, 255, 0.7)',
+                'rgba(255, 159, 64, 0.7)'
+            ],
+            pastel: [
+                'rgba(255, 179, 186, 0.7)',
+                'rgba(186, 225, 255, 0.7)',
+                'rgba(255, 223, 186, 0.7)',
+                'rgba(186, 255, 201, 0.7)',
+                'rgba(226, 186, 255, 0.7)',
+                'rgba(255, 223, 186, 0.7)'
+            ],
+            vivid: [
+                'rgba(255, 0, 0, 0.7)',
+                'rgba(0, 0, 255, 0.7)',
+                'rgba(255, 255, 0, 0.7)',
+                'rgba(0, 255, 0, 0.7)',
+                'rgba(255, 0, 255, 0.7)',
+                'rgba(0, 255, 255, 0.7)'
+            ],
+            gold: [
+                'rgba(212, 175, 55, 0.7)',
+                'rgba(218, 165, 32, 0.7)',
+                'rgba(184, 134, 11, 0.7)',
+                'rgba(255, 215, 0, 0.7)',
+                'rgba(238, 232, 170, 0.7)',
+                'rgba(189, 183, 107, 0.7)'
+            ]
+        };
+
+        // 타입 선택
+        document.querySelectorAll('.chart-type-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                currentChartType = btn.dataset.type;
+                document.querySelectorAll('.chart-type-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+            });
+        });
+
+        // 행 추가
+        document.getElementById('addRowBtn').addEventListener('click', () => {
+            const tbody = document.getElementById('dataRows');
+            const rowCount = tbody.children.length;
+            const newRow = document.createElement('tr');
+            newRow.innerHTML = `
+                <td><input type="text" value="항목 ${rowCount + 1}" data-row="${rowCount}" data-col="label"></td>
+                <td><input type="number" value="0" data-row="${rowCount}" data-col="value"></td>
+            `;
+            tbody.appendChild(newRow);
+        });
+
+        // CSV 업로드
+        document.getElementById('csvUploadBtn').addEventListener('click', () => {
+            document.getElementById('csvInput').click();
+        });
+
+        document.getElementById('csvInput').addEventListener('change', async (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            try {
+                const text = await file.text();
+                const lines = text.split('\n').filter(line => line.trim());
+
+                if (lines.length < 2) {
+                    window.BaalUtils.showToast('CSV 파일이 비어있거나 형식이 잘못되었습니다.', 'error', 5000);
+                    return;
+                }
+
+                // 테이블 초기화
+                const tbody = document.getElementById('dataRows');
+                tbody.innerHTML = '';
+
+                // 첫 행은 건너뛰고 (레이블), 데이터 행만 파싱
+                for (let i = 1; i < lines.length; i++) {
+                    const values = lines[i].split(',').map(v => v.trim());
+                    if (values.length >= 2) {
+                        const newRow = document.createElement('tr');
+                        newRow.innerHTML = `
+                            <td><input type="text" value="${values[0]}" data-row="${i-1}" data-col="label"></td>
+                            <td><input type="number" value="${parseFloat(values[1]) || 0}" data-row="${i-1}" data-col="value"></td>
+                        `;
+                        tbody.appendChild(newRow);
+                    }
+                }
+
+                window.BaalUtils.showToast(`CSV 파일 로드 완료! (${lines.length - 1}개 행)`, 'success', 5000);
+
+                // 자동으로 차트 생성
+                setTimeout(() => generateChart(), 500);
+
+            } catch (error) {
+                console.error('CSV parse error:', error);
+                window.BaalUtils.showToast('CSV 파일 읽기 실패: ' + error.message, 'error', 5000);
+            }
+        });
+
+        // 차트 생성
+        document.getElementById('generateBtn').addEventListener('click', () => {
+            generateChart();
+        });
+
+        function generateChart() {
+            const rows = Array.from(document.querySelectorAll('#dataRows tr'));
+            const labels = [];
+            const data = [];
+
+            rows.forEach(row => {
+                const labelInput = row.querySelector('[data-col="label"]');
+                const valueInput = row.querySelector('[data-col="value"]');
+
+                if (labelInput && valueInput) {
+                    labels.push(labelInput.value || '항목');
+                    data.push(parseFloat(valueInput.value) || 0);
+                }
+            });
+
+            if (data.length === 0) {
+                window.BaalUtils.showToast('데이터를 입력하세요.', 'error', 5000);
+                return;
+            }
+
+            const palette = document.getElementById('colorPalette').value;
+            const legendPosition = document.getElementById('legendPosition').value;
+
+            const colors = colorPalettes[palette];
+            const backgroundColors = data.map((_, i) => colors[i % colors.length]);
+            const borderColors = backgroundColors.map(c => c.replace('0.7', '1'));
+
+            // 기존 차트 제거
+            if (chartInstance) {
+                chartInstance.destroy();
+            }
+
+            const ctx = document.getElementById('chartCanvas').getContext('2d');
+
+            chartInstance = new Chart(ctx, {
+                type: currentChartType,
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: '데이터',
+                        data: data,
+                        backgroundColor: backgroundColors,
+                        borderColor: borderColors,
+                        borderWidth: 2,
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    plugins: {
+                        legend: {
+                            position: legendPosition,
+                            labels: {
+                                color: getComputedStyle(document.body).getPropertyValue('--text-primary').trim()
+                            }
+                        }
+                    },
+                    scales: (currentChartType === 'pie' || currentChartType === 'doughnut' || currentChartType === 'polarArea') ? {} : {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                color: getComputedStyle(document.body).getPropertyValue('--text-secondary').trim()
+                            },
+                            grid: {
+                                color: 'rgba(0, 0, 0, 0.1)'
+                            }
+                        },
+                        x: {
+                            ticks: {
+                                color: getComputedStyle(document.body).getPropertyValue('--text-secondary').trim()
+                            },
+                            grid: {
+                                color: 'rgba(0, 0, 0, 0.1)'
+                            }
+                        }
+                    }
+                }
+            });
+
+            window.BaalUtils.showToast('차트가 생성되었습니다!', 'success', 5000);
+        }
+
+        // PNG 다운로드
+        document.getElementById('downloadPNG').addEventListener('click', () => {
+            if (!chartInstance) {
+                window.BaalUtils.showToast('먼저 차트를 생성하세요.', 'error', 5000);
+                return;
+            }
+
+            const canvas = document.getElementById('chartCanvas');
+            canvas.toBlob((blob) => {
+                window.BaalUtils.downloadFile(blob, 'chart.png');
+                window.BaalUtils.showToast('PNG 다운로드 완료!', 'success', 5000);
+            }, 'image/png');
+        });
+
+        // 초기 차트 생성
+        generateChart();
+    </script>
+</body>
+</html>
