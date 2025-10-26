@@ -558,7 +558,7 @@
                     </button>
                     <button class="chart-type-btn" id="generateBtnBottom" style="background: var(--gold-gradient); color: white; border-color: var(--gold-primary);">
                         <svg class="chart-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>
-                        <span data-ko="생성" data-en="Generate">생성</span>
+                        <span data-ko="차트생성" data-en="Generate Chart">차트생성</span>
                     </button>
                 </div>
                 <button class="btn-download" id="downloadPNG" data-ko="PNG 다운로드" data-en="Download PNG">PNG 다운로드</button>
@@ -702,13 +702,40 @@
             ]
         };
 
-        // 타입 선택
+        // 타입 선택 (상단/하단 버튼 연동)
         document.querySelectorAll('.chart-type-btn').forEach(btn => {
             btn.addEventListener('click', () => {
-                currentChartType = btn.dataset.type;
-                document.querySelectorAll('.chart-type-btn').forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
+                const selectedType = btn.dataset.type;
+
+                // 생성 버튼이 아닌 경우에만 차트 타입 변경
+                if (selectedType) {
+                    currentChartType = selectedType;
+
+                    // 같은 타입의 모든 버튼을 active로 설정
+                    document.querySelectorAll('.chart-type-btn').forEach(b => {
+                        if (b.dataset.type === selectedType) {
+                            b.classList.add('active');
+                            b.style.background = 'var(--gold-gradient)';
+                            b.style.color = 'white';
+                            b.style.borderColor = 'var(--gold-primary)';
+                        } else if (b.dataset.type) {
+                            // 생성 버튼이 아닌 다른 타입 버튼들은 비활성화
+                            b.classList.remove('active');
+                            b.style.background = 'var(--bg-secondary)';
+                            b.style.color = 'var(--text-primary)';
+                            b.style.borderColor = 'var(--border-color)';
+                        }
+                    });
+                }
             });
+        });
+
+        // 초기 로드 시 line 버튼들을 active 상태로 설정
+        document.querySelectorAll('.chart-type-btn[data-type="line"]').forEach(btn => {
+            btn.classList.add('active');
+            btn.style.background = 'var(--gold-gradient)';
+            btn.style.color = 'white';
+            btn.style.borderColor = 'var(--gold-primary)';
         });
 
         // Range 슬라이더 실시간 업데이트
