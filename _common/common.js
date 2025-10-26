@@ -81,8 +81,7 @@ const showToast = (message, type = 'info', duration = 3000) => {
     toast.style.cssText = `
         position: fixed;
         bottom: 30px;
-        left: 50%;
-        transform: translateX(-50%);
+        right: 30px;
         background: ${type === 'error' ? '#c92a2a' : type === 'success' ? '#2f9e44' : '#1864ab'};
         color: white;
         padding: 16px 24px;
@@ -90,7 +89,8 @@ const showToast = (message, type = 'info', duration = 3000) => {
         box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
         z-index: 10000;
         font-weight: 600;
-        animation: slideUp 0.3s ease;
+        animation: slideInRight 0.3s ease;
+        max-width: 400px;
     `;
 
     document.body.appendChild(toast);
@@ -98,14 +98,14 @@ const showToast = (message, type = 'info', duration = 3000) => {
     // 애니메이션 추가
     const style = document.createElement('style');
     style.textContent = `
-        @keyframes slideUp {
+        @keyframes slideInRight {
             from {
                 opacity: 0;
-                transform: translateX(-50%) translateY(20px);
+                transform: translateX(100px);
             }
             to {
                 opacity: 1;
-                transform: translateX(-50%) translateY(0);
+                transform: translateX(0);
             }
         }
     `;
@@ -113,7 +113,7 @@ const showToast = (message, type = 'info', duration = 3000) => {
 
     // 자동 제거
     setTimeout(() => {
-        toast.style.animation = 'slideUp 0.3s ease reverse';
+        toast.style.animation = 'slideInRight 0.3s ease reverse';
         setTimeout(() => toast.remove(), 300);
     }, duration);
 };

@@ -75,9 +75,11 @@
         }
 
         .chart-icon {
-            font-size: 2em;
+            width: 48px;
+            height: 48px;
             display: block;
-            margin-bottom: 8px;
+            margin: 0 auto 8px;
+            stroke: currentColor;
         }
 
         /* 데이터 입력 */
@@ -240,6 +242,46 @@
             flex-wrap: wrap;
         }
 
+
+        /* Range 슬라이더 스타일 */
+        .option-range {
+            -webkit-appearance: none;
+            appearance: none;
+            height: 6px;
+            background: var(--border-color);
+            border-radius: 3px;
+            outline: none;
+        }
+
+        .option-range::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 18px;
+            height: 18px;
+            background: var(--gold-gradient);
+            border-radius: 50%;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .option-range::-webkit-slider-thumb:hover {
+            transform: scale(1.2);
+        }
+
+        .option-range::-moz-range-thumb {
+            width: 18px;
+            height: 18px;
+            background: var(--gold-gradient);
+            border-radius: 50%;
+            border: none;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .option-range::-moz-range-thumb:hover {
+            transform: scale(1.2);
+        }
+
         /* 반응형 */
         @media (max-width: 768px) {
             .chart-types {
@@ -297,27 +339,27 @@
                 </label>
                 <div class="chart-types">
                     <button class="chart-type-btn active" data-type="line">
-                        <span class="chart-icon">📈</span>
+                        <svg class="chart-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
                         <span data-ko="선 그래프" data-en="Line Chart">선 그래프</span>
                     </button>
                     <button class="chart-type-btn" data-type="bar">
-                        <span class="chart-icon">📊</span>
+                        <svg class="chart-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="20" x2="12" y2="10"></line><line x1="18" y1="20" x2="18" y2="4"></line><line x1="6" y1="20" x2="6" y2="16"></line></svg>
                         <span data-ko="막대 그래프" data-en="Bar Chart">막대 그래프</span>
                     </button>
                     <button class="chart-type-btn" data-type="pie">
-                        <span class="chart-icon">🥧</span>
+                        <svg class="chart-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.21 15.89A10 10 0 1 1 8 2.83"></path><path d="M22 12A10 10 0 0 0 12 2v10z"></path></svg>
                         <span data-ko="원형 그래프" data-en="Pie Chart">원형 그래프</span>
                     </button>
                     <button class="chart-type-btn" data-type="doughnut">
-                        <span class="chart-icon">🍩</span>
+                        <svg class="chart-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="6"></circle><path d="M12 2 L12 8"></path><path d="M19.07 4.93 L14.83 9.17"></path></svg>
                         <span data-ko="도넛 그래프" data-en="Doughnut">도넛 그래프</span>
                     </button>
                     <button class="chart-type-btn" data-type="radar">
-                        <span class="chart-icon">🎯</span>
+                        <svg class="chart-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2, 22 12, 17 22, 7 22, 2 12"></polygon><polygon points="12 7, 18 12, 15 18, 9 18, 6 12"></polygon><line x1="12" y1="2" x2="12" y2="7"></line><line x1="22" y1="12" x2="18" y2="12"></line></svg>
                         <span data-ko="방사형" data-en="Radar">방사형</span>
                     </button>
                     <button class="chart-type-btn" data-type="polarArea">
-                        <span class="chart-icon">⭕</span>
+                        <svg class="chart-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="2" x2="12" y2="22"></line><line x1="2" y1="12" x2="22" y2="12"></line><line x1="5.64" y1="5.64" x2="18.36" y2="18.36"></line><line x1="5.64" y1="18.36" x2="18.36" y2="5.64"></line></svg>
                         <span data-ko="극좌표" data-en="Polar Area">극좌표</span>
                     </button>
                 </div>
@@ -379,14 +421,42 @@
                 </label>
 
                 <div class="option-row">
-                    <span class="option-label" data-ko="색상 팔레트" data-en="Color Palette">색상 팔레트</span>
+                    <span class="option-label" data-ko="색상 테마" data-en="Color Theme">색상 테마</span>
                     <div class="option-control">
                         <select class="option-select" id="colorPalette">
-                            <option value="default" data-ko="기본" data-en="Default">기본</option>
-                            <option value="pastel" data-ko="파스텔" data-en="Pastel">파스텔</option>
-                            <option value="vivid" data-ko="비비드" data-en="Vivid">비비드</option>
-                            <option value="gold" data-ko="골드" data-en="Gold">골드</option>
+                            <option value="default" data-ko="기본 (블루/핑크)" data-en="Default (Blue/Pink)">기본 (블루/핑크)</option>
+                            <option value="pastel" data-ko="파스텔 (부드러움)" data-en="Pastel (Soft)">파스텔 (부드러움)</option>
+                            <option value="vivid" data-ko="비비드 (선명)" data-en="Vivid (Bright)">비비드 (선명)</option>
+                            <option value="gold" data-ko="골드 (고급)" data-en="Gold (Luxury)">골드 (고급)</option>
+                            <option value="nature" data-ko="자연 (그린)" data-en="Nature (Green)">자연 (그린)</option>
+                            <option value="ocean" data-ko="오션 (블루)" data-en="Ocean (Blue)">오션 (블루)</option>
+                            <option value="sunset" data-ko="석양 (웜톤)" data-en="Sunset (Warm)">석양 (웜톤)</option>
+                            <option value="business" data-ko="비즈니스 (차분)" data-en="Business (Professional)">비즈니스 (차분)</option>
                         </select>
+                    </div>
+                </div>
+
+                <div class="option-row">
+                    <span class="option-label" data-ko="투명도" data-en="Opacity">투명도</span>
+                    <div class="option-control" style="display: flex; align-items: center; gap: 12px;">
+                        <input type="range" class="option-range" id="colorOpacity" min="0" max="100" value="70" style="flex: 1;">
+                        <span id="opacityValue" style="min-width: 45px; font-weight: 600; color: var(--text-primary);">70%</span>
+                    </div>
+                </div>
+
+                <div class="option-row">
+                    <span class="option-label" data-ko="테두리 두께" data-en="Border Width">테두리 두께</span>
+                    <div class="option-control" style="display: flex; align-items: center; gap: 12px;">
+                        <input type="range" class="option-range" id="borderWidth" min="0" max="8" value="2" style="flex: 1;">
+                        <span id="borderValue" style="min-width: 45px; font-weight: 600; color: var(--text-primary);">2px</span>
+                    </div>
+                </div>
+
+                <div class="option-row">
+                    <span class="option-label" data-ko="선 곡률" data-en="Line Tension">선 곡률</span>
+                    <div class="option-control" style="display: flex; align-items: center; gap: 12px;">
+                        <input type="range" class="option-range" id="lineTension" min="0" max="100" value="40" style="flex: 1;">
+                        <span id="tensionValue" style="min-width: 45px; font-weight: 600; color: var(--text-primary);">0.4</span>
                     </div>
                 </div>
 
@@ -398,6 +468,18 @@
                             <option value="bottom" data-ko="하단" data-en="Bottom">하단</option>
                             <option value="left" data-ko="왼쪽" data-en="Left">왼쪽</option>
                             <option value="right" data-ko="오른쪽" data-en="Right">오른쪽</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="option-row">
+                    <span class="option-label" data-ko="애니메이션" data-en="Animation">애니메이션</span>
+                    <div class="option-control">
+                        <select class="option-select" id="animationDuration">
+                            <option value="0" data-ko="없음" data-en="None">없음</option>
+                            <option value="500" data-ko="빠름 (0.5초)" data-en="Fast (0.5s)">빠름 (0.5초)</option>
+                            <option value="1000" selected data-ko="보통 (1초)" data-en="Normal (1s)">보통 (1초)</option>
+                            <option value="2000" data-ko="느림 (2초)" data-en="Slow (2s)">느림 (2초)</option>
                         </select>
                     </div>
                 </div>
@@ -446,39 +528,87 @@
         let currentChartType = 'line';
         let chartInstance = null;
 
-        // 색상 팔레트
+        // 색상 팔레트 (RGB 값만, 투명도는 동적 적용)
         const colorPalettes = {
             default: [
-                'rgba(255, 99, 132, 0.7)',
-                'rgba(54, 162, 235, 0.7)',
-                'rgba(255, 206, 86, 0.7)',
-                'rgba(75, 192, 192, 0.7)',
-                'rgba(153, 102, 255, 0.7)',
-                'rgba(255, 159, 64, 0.7)'
+                [255, 99, 132],
+                [54, 162, 235],
+                [255, 206, 86],
+                [75, 192, 192],
+                [153, 102, 255],
+                [255, 159, 64],
+                [255, 99, 71],
+                [100, 149, 237]
             ],
             pastel: [
-                'rgba(255, 179, 186, 0.7)',
-                'rgba(186, 225, 255, 0.7)',
-                'rgba(255, 223, 186, 0.7)',
-                'rgba(186, 255, 201, 0.7)',
-                'rgba(226, 186, 255, 0.7)',
-                'rgba(255, 223, 186, 0.7)'
+                [255, 179, 186],
+                [186, 225, 255],
+                [255, 223, 186],
+                [186, 255, 201],
+                [226, 186, 255],
+                [255, 218, 185],
+                [221, 160, 221],
+                [175, 238, 238]
             ],
             vivid: [
-                'rgba(255, 0, 0, 0.7)',
-                'rgba(0, 0, 255, 0.7)',
-                'rgba(255, 255, 0, 0.7)',
-                'rgba(0, 255, 0, 0.7)',
-                'rgba(255, 0, 255, 0.7)',
-                'rgba(0, 255, 255, 0.7)'
+                [255, 0, 0],
+                [0, 0, 255],
+                [255, 255, 0],
+                [0, 255, 0],
+                [255, 0, 255],
+                [0, 255, 255],
+                [255, 69, 0],
+                [138, 43, 226]
             ],
             gold: [
-                'rgba(212, 175, 55, 0.7)',
-                'rgba(218, 165, 32, 0.7)',
-                'rgba(184, 134, 11, 0.7)',
-                'rgba(255, 215, 0, 0.7)',
-                'rgba(238, 232, 170, 0.7)',
-                'rgba(189, 183, 107, 0.7)'
+                [212, 175, 55],
+                [218, 165, 32],
+                [184, 134, 11],
+                [255, 215, 0],
+                [238, 232, 170],
+                [189, 183, 107],
+                [205, 149, 12],
+                [139, 117, 0]
+            ],
+            nature: [
+                [34, 139, 34],
+                [50, 205, 50],
+                [144, 238, 144],
+                [0, 128, 0],
+                [107, 142, 35],
+                [154, 205, 50],
+                [46, 125, 50],
+                [76, 175, 80]
+            ],
+            ocean: [
+                [0, 105, 148],
+                [0, 191, 255],
+                [30, 144, 255],
+                [70, 130, 180],
+                [100, 149, 237],
+                [135, 206, 250],
+                [0, 119, 190],
+                [3, 155, 229]
+            ],
+            sunset: [
+                [255, 99, 71],
+                [255, 140, 0],
+                [255, 165, 0],
+                [255, 127, 80],
+                [255, 69, 0],
+                [255, 192, 203],
+                [244, 67, 54],
+                [255, 87, 34]
+            ],
+            business: [
+                [66, 66, 66],
+                [97, 97, 97],
+                [117, 117, 117],
+                [158, 158, 158],
+                [189, 189, 189],
+                [224, 224, 224],
+                [33, 33, 33],
+                [130, 130, 130]
             ]
         };
 
@@ -490,6 +620,33 @@
                 btn.classList.add('active');
             });
         });
+
+        // Range 슬라이더 실시간 업데이트
+        const opacitySlider = document.getElementById('colorOpacity');
+        const opacityValue = document.getElementById('opacityValue');
+        const borderSlider = document.getElementById('borderWidth');
+        const borderValue = document.getElementById('borderValue');
+        const tensionSlider = document.getElementById('lineTension');
+        const tensionValue = document.getElementById('tensionValue');
+
+        if (opacitySlider && opacityValue) {
+            opacitySlider.addEventListener('input', (e) => {
+                opacityValue.textContent = e.target.value + '%';
+            });
+        }
+
+        if (borderSlider && borderValue) {
+            borderSlider.addEventListener('input', (e) => {
+                borderValue.textContent = e.target.value + 'px';
+            });
+        }
+
+        if (tensionSlider && tensionValue) {
+            tensionSlider.addEventListener('input', (e) => {
+                const val = (e.target.value / 100).toFixed(1);
+                tensionValue.textContent = val;
+            });
+        }
 
         // 행 추가
         document.getElementById('addRowBtn').addEventListener('click', () => {
@@ -591,6 +748,125 @@
                     labels.push(labelInput.value || '항목');
                     data.push(parseFloat(valueInput.value) || 0);
                 }
+            });
+
+            if (data.length === 0) {
+                window.BaalUtils.showToast('데이터를 입력하세요.', 'error', 5000);
+                return;
+            }
+
+            const palette = document.getElementById('colorPalette').value;
+            const opacity = parseInt(document.getElementById('colorOpacity').value) / 100;
+            const borderWidth = parseInt(document.getElementById('borderWidth').value);
+            const tension = parseInt(document.getElementById('lineTension').value) / 100;
+            const legendPosition = document.getElementById('legendPosition').value;
+            const animationDuration = parseInt(document.getElementById('animationDuration').value);
+
+            const rgbColors = colorPalettes[palette];
+            const backgroundColors = data.map((_, i) => {
+                const [r, g, b] = rgbColors[i % rgbColors.length];
+                return `rgba(${r}, ${g}, ${b}, ${opacity})`;
+            });
+            const borderColors = data.map((_, i) => {
+                const [r, g, b] = rgbColors[i % rgbColors.length];
+                return `rgba(${r}, ${g}, ${b}, 1)`;
+            });
+
+            if (chartInstance) {
+                chartInstance.destroy();
+            }
+
+            const ctx = document.getElementById('chartCanvas').getContext('2d');
+
+            const datasetOptions = {
+                label: '데이터',
+                data: data,
+                backgroundColor: backgroundColors,
+                borderColor: borderColors,
+                borderWidth: borderWidth,
+                tension: tension
+            };
+
+            if (currentChartType === 'line') {
+                datasetOptions.fill = false;
+                datasetOptions.pointRadius = 4;
+                datasetOptions.pointHoverRadius = 6;
+            }
+
+            if (currentChartType === 'radar') {
+                datasetOptions.fill = true;
+                datasetOptions.pointRadius = 3;
+            }
+
+            chartInstance = new Chart(ctx, {
+                type: currentChartType,
+                data: {
+                    labels: labels,
+                    datasets: [datasetOptions]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    animation: {
+                        duration: animationDuration
+                    },
+                    plugins: {
+                        legend: {
+                            position: legendPosition,
+                            labels: {
+                                color: getComputedStyle(document.body).getPropertyValue('--text-primary').trim(),
+                                padding: 15,
+                                font: {
+                                    size: 12,
+                                    weight: '600'
+                                }
+                            }
+                        },
+                        tooltip: {
+                            backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                            padding: 12,
+                            titleFont: {
+                                size: 14,
+                                weight: 'bold'
+                            },
+                            bodyFont: {
+                                size: 13
+                            },
+                            cornerRadius: 8
+                        }
+                    },
+                    scales: (currentChartType === 'pie' || currentChartType === 'doughnut' || currentChartType === 'polarArea') ? {} : {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                color: getComputedStyle(document.body).getPropertyValue('--text-secondary').trim(),
+                                font: {
+                                    size: 11
+                                }
+                            },
+                            grid: {
+                                color: 'rgba(0, 0, 0, 0.08)',
+                                drawBorder: false
+                            }
+                        },
+                        x: {
+                            ticks: {
+                                color: getComputedStyle(document.body).getPropertyValue('--text-secondary').trim(),
+                                font: {
+                                    size: 11
+                                }
+                            },
+                            grid: {
+                                color: 'rgba(0, 0, 0, 0.08)',
+                                drawBorder: false
+                            }
+                        }
+                    }
+                }
+            });
+
+            window.BaalUtils.showToast('차트가 생성되었습니다!', 'success', 5000);
+        }
             });
 
             if (data.length === 0) {
