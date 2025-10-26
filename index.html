@@ -357,6 +357,11 @@
         </header>
 
         <main>
+            <!-- 차트 생성 버튼 (상단) -->
+            <div style="text-align: center; margin-bottom: 25px;">
+                <button class="btn-generate" id="generateBtnTop" data-ko="📊 차트 생성" data-en="📊 Generate Chart">📊 차트 생성</button>
+            </div>
+
             <!-- 📝 데이터 입력 -->
             <div class="data-section">
                 <label class="data-label">
@@ -815,8 +820,15 @@
             }
         });
 
-        // 차트 생성 버튼 이벤트 (테이블 영역 버튼만)
+        // 차트 생성 버튼 이벤트 (상단 + 테이블 영역)
+        const generateBtnTop = document.getElementById('generateBtnTop');
         const generateBtnTable = document.getElementById('generateBtnTable');
+
+        if (generateBtnTop) {
+            generateBtnTop.addEventListener('click', () => {
+                generateChart();
+            });
+        }
 
         if (generateBtnTable) {
             generateBtnTable.addEventListener('click', () => {
